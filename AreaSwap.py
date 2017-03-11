@@ -44,13 +44,13 @@ def bone_has_physics(ob):
  
 def has_physics(ob):
     if ob.rigid_body or ob.rigid_body_constraint:
-        print ('rigid_body or ob.rigid_body_constraint')
+        # print ('rigid_body or ob.rigid_body_constraint')#Dbg#
         return (1)
     if ob.type == 'MESH' and ob.collision.use:
-        print ('collision')
+        # print ('collision')#Dbg#
         return (1)
     if has_mod(ob):
-        print ('has_modifier')
+        # print ('has_modifier')#Dbg#
         for m in ob.modifiers:
             if m.type in ['CLOTH', 'SOFT_BODY', 'FLUID_SIMULATION', 'DYNAMIC_PAINT', 'SMOKE']:
                 return(1)
@@ -71,7 +71,7 @@ def has_particles(ob):
  
 def Swap_properties_panel():
     #check  for an active object
-    obj = C.object
+    obj = bpy.context.object
     if not obj:
         return (1, 'must select an active object')
  
@@ -93,7 +93,7 @@ def Swap_properties_panel():
     tp = obj.type
  
     props = DicObjects[tp]
-    print(props)
+    # print(props)#Dbg#
  
     #actualize props list to keep only available
     for p in list(props):
@@ -108,7 +108,7 @@ def Swap_properties_panel():
         if p == 'PHYSICS' and not has_physics(obj):
             props.remove(p)
  
-    #print (props, 'availables panels')
+    print (props, 'availables panels')#Dbg#
  
  
     if pan in props:
