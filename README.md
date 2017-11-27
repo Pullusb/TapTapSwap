@@ -14,6 +14,7 @@ You can add the keymap manually the exact same way the addon does [as shown in t
 
 *But also:*  
 Keymap **Z** to swap between **dopesheet and graph editor**. (Hjalti Hjalmarsson idea) 
+
 Keymap **shift+Z** to swap between **timeline and dopesheet** (my idea, hurray !)
 
 *bonus :*  
