@@ -12,12 +12,12 @@ Exactly like *Shift+F7* for Property editor and *Shift+F9* for outliner but waaa
 
 You can add the keymap manually the exact same way the addon does [as shown in this french forum](http://blenderlounge.fr/forum/viewtopic.php?f=5&t=1446&start=45) (which was the direct source for creating this addon)  
 
-But also:  
+*But also:*  
 Keymap **Z** to swap between **dopesheet and graph editor**. (Hjalti Hjalmarsson idea) 
-
 Keymap **shift+Z** to swap between **timeline and dopesheet** (my idea, hurray !)
 
-Keymap **ctrl+shift+alt+X** to iterate in properties panels tabs (the shortcut is way to complex but it's hard to get free left hand accessible keymapping these days ^^)
+*bonus :*  
+Keymap **ctrl+shift+alt+X** to iterate in properties panels tabs (the shortcut is way to complex but it's hard to get free left-hand-accessible shortcuts these days ^^)
   
   
 ### 1.4 Update (20/03/2017)
