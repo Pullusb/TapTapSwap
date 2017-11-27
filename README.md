@@ -21,11 +21,12 @@ Keymap **shift+Z** to swap between **timeline and dopesheet** (my idea, hurray !
 Keymap **ctrl+shift+alt+X** to iterate in properties panels tabs (the shortcut is way to complex but it's hard to get free left-hand-accessible shortcuts these days ^^)
   
   
-### 1.4 Update (20/03/2017)
+
+#### 1.4 Update (20/03/2017)
 new shortcut :
 **shift+Z swap timeline/dopesheet**
 
-### 1.2 Update (11/03/2017)
+#### 1.2 Update (11/03/2017)
 new shortcut :
 **ctrl+shift+alt+X iterate swap of properties panels tabs** according to active object type and data availability of this object.
 
