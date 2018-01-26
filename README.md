@@ -1,6 +1,8 @@
 # TapTapSwap
 Blender addon - Keymap shortcuts to swap some areas of blender
 
+**[Download latest](https://raw.githubusercontent.com/Pullusb/TapTapSwap/master/TapTapSwap.py)** (right click, save Target as)
+
 ---
 
 ### Description  
