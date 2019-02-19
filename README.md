@@ -3,6 +3,8 @@ Blender addon - Keymap shortcuts to swap some areas of blender
 
 **[Download latest](https://raw.githubusercontent.com/Pullusb/TapTapSwap/master/TapTapSwap.py)** (right click, save Target as)
 
+**[Download older (2.7 version)](https://raw.githubusercontent.com/Pullusb/TapTapSwap/master/TapTapSwap_279.py)** (right click, save Target as)
+
 ---
 
 ### Description  
@@ -23,6 +25,8 @@ Keymap **shift+Z** to swap between **timeline and dopesheet** (my idea, hurray !
 Keymap **ctrl+shift+alt+X** to iterate in properties panels tabs (the shortcut is way to complex but it's hard to get free left-hand-accessible shortcuts these days ^^)
   
   
+
+#### 2.8 update (19/02/2019)
 
 #### 1.4 Update (20/03/2017)
 new shortcut :
