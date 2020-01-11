@@ -5,6 +5,8 @@ Blender addon - Keymap shortcuts to swap some areas of blender
 
 **[Download older (2.7 version)](https://raw.githubusercontent.com/Pullusb/TapTapSwap/master/TapTapSwap_279.py)** (right click, save Target as)
 
+## [Demo Youtube](https://www.youtube.com/watch?v=43v5kxFkcZk)
+
 ---
 
 ### Description  
