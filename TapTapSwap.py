@@ -2,11 +2,11 @@ bl_info = {
     "name": "TapTapSwap",
     "description": "add some usefull swapping shortcut",
     "author": "Samuel Bernou, based on Cédric Lepiller/Hjalti Hjalmarsson/my ideas ;)",
-    "version": (1, 5, 0),
+    "version": (1, 6, 0),
     "blender": (2, 80, 0),
     "location": "Hit TAB swap outliner/property editor, Z swap dopesheet/graph editor, shift+Z in timeline, ctrl+shift+alt+X swap active object's properties tabs from anywhere",
     "warning": "",
-    "wiki_url": "",
+    "doc_url": "https://github.com/Pullusb/TapTapSwap",
     "category": "User Interface" }
 
 import bpy
@@ -139,14 +139,6 @@ class UI_OT_Swap_panel_prop(bpy.types.Operator):
 
 
 ###--KEYMAPS
-addon_keymaps = []
-def register_keymaps():
-    addon = bpy.context.window_manager.keyconfigs.addon
-
-    addon_keymaps.append(km)
-
-
-###---Keymap
 
 addon_keymaps = []
 def register_keymaps():
@@ -167,14 +159,14 @@ def register_keymaps():
     kmi = km.keymap_items.new("wm.context_set_enum", type = "TAB", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'OUTLINER'
-    addon_keymaps.append(km)
+    addon_keymaps.append((km, kmi))
 
     ##from Outliner to Properties - Tab
     km = addon.keymaps.new(name = "Outliner",space_type='OUTLINER', region_type='WINDOW')
     kmi = km.keymap_items.new("wm.context_set_enum", type = "TAB", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'PROPERTIES'
-    addon_keymaps.append(km)
+    addon_keymaps.append((km, kmi))
 
 
     ######dopesheet/GraphEditor Swap - Z
@@ -184,14 +176,14 @@ def register_keymaps():
     kmi = km.keymap_items.new("wm.context_set_enum", type = "Z", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'GRAPH_EDITOR'
-    addon_keymaps.append(km)
+    addon_keymaps.append((km, kmi))
 
     ##from Graph to dopesheet - Z
     km = addon.keymaps.new(name = "Graph Editor",space_type='GRAPH_EDITOR', region_type='WINDOW')
     kmi = km.keymap_items.new("wm.context_set_enum", type = "Z", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'DOPESHEET_EDITOR'
-    addon_keymaps.append(km)
+    addon_keymaps.append((km, kmi))
 
 
 '''
@@ -203,24 +195,22 @@ def register_keymaps():
     kmi = km.keymap_items.new("wm.context_set_enum", type = "Z", value = "PRESS", shift = True)
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'DOPESHEET_EDITOR'
-    addon_keymaps.append(km)
+    addon_keymaps.append((km, kmi))
 
     ##from dopesheet to timeline - shift Z
     km = addon.keymaps.new(name = "Dopesheet",space_type='DOPESHEET_EDITOR', region_type='WINDOW')
     kmi = km.keymap_items.new("wm.context_set_enum", type = "Z", value = "PRESS", shift = True)
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'TIMELINE'
-    addon_keymaps.append(km)
+    addon_keymaps.append((km, kmi))
 '''
 
 
-
 def unregister_keymaps():
-    wm = bpy.context.window_manager
-    for km in addon_keymaps:
-        for kmi in km.keymap_items:
-            km.keymap_items.remove(kmi)
-        wm.keyconfigs.addon.keymaps.remove(km)
+    # wm = bpy.context.window_manager
+    for km, kmi in addon_keymaps:
+        km.keymap_items.remove(kmi)
+        # wm.keyconfigs.addon.keymaps.remove(km)
     addon_keymaps.clear()
 
 

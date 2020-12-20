@@ -26,9 +26,21 @@ Keymap **shift+Z** to swap between **timeline and dopesheet** (my idea, hurray !
 *bonus :*  
 Keymap **ctrl+shift+alt+X** to iterate in properties panels tabs (the shortcut is way to complex but it's hard to get free left-hand-accessible shortcuts these days ^^)
   
-  
+### note
+[robert-trirop](https://github.com/robert-trirop) made an addon "[editor switcher](https://github.com/robert-trirop/editor_switcher)" that call a pie menu for switching area (with all area choices), if you want a quick way to change/relocate area, it may be better for you.
+
+---
+### Changelog
+
+
+#### 1.6.0 (20/12/2020)
+
+- Fix an uncorrect keymap unregister that has been there forever
+- add doc url
+- code cleanup
 
 #### 2.8 update (19/02/2019)
+Make it work with blender 2.8 
 
 #### 1.4 Update (20/03/2017)
 new shortcut :
@@ -37,7 +49,3 @@ new shortcut :
 #### 1.2 Update (11/03/2017)
 new shortcut :
 **ctrl+shift+alt+X iterate swap of properties panels tabs** according to active object type and data availability of this object.
-
-
-### note
-[robert-trirop](https://github.com/robert-trirop) made an addon "[editor switcher](https://github.com/robert-trirop/editor_switcher)" that call a pie menu for switching area (with all area choices), if you want a quick way to change/relocate area, it may be better for you.
