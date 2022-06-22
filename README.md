@@ -1,9 +1,9 @@
 # TapTapSwap
 Blender addon - Keymap shortcuts to swap some areas of blender
 
-**[Download latest](https://raw.githubusercontent.com/Pullusb/TapTapSwap/master/TapTapSwap.py)** (right click, save Target as)
+**[Download latest](https://raw.githubusercontent.com/Pullusb/TapTapSwap/master/TapTapSwap.py)**
 
-**[Download older (2.7 version)](https://raw.githubusercontent.com/Pullusb/TapTapSwap/master/TapTapSwap_279.py)** (right click, save Target as)
+Old blender 2.7 compatible version can be found [here](https://github.com/Pullusb/SB_blender_addons_old_2_7)
 
 ## [Demo Youtube](https://www.youtube.com/watch?v=43v5kxFkcZk)
 
@@ -32,6 +32,9 @@ Keymap **ctrl+shift+alt+X** to iterate in properties panels tabs (the shortcut i
 ---
 ### Changelog
 
+#### 1.7.0 (2022/06/22)
+
+- changed from single file mode to folder addon mode.
 
 #### 1.6.0 (20/12/2020)
 

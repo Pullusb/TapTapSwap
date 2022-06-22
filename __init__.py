@@ -1,8 +1,8 @@
 bl_info = {
     "name": "TapTapSwap",
-    "description": "add some usefull swapping shortcut",
-    "author": "Samuel Bernou, based on Cédric Lepiller/Hjalti Hjalmarsson/my ideas ;)",
-    "version": (1, 6, 0),
+    "description": "Add some usefull swapping shortcut",
+    "author": "Samuel Bernou, based on Cédric Lepiller/Hjalti Hjalmarsson ideas",
+    "version": (1, 7, 0),
     "blender": (2, 80, 0),
     "location": "Hit TAB swap outliner/property editor, Z swap dopesheet/graph editor, shift+Z in timeline, ctrl+shift+alt+X swap active object's properties tabs from anywhere",
     "warning": "",
