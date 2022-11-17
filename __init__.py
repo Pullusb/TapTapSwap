@@ -2,7 +2,7 @@ bl_info = {
     "name": "TapTapSwap",
     "description": "Add some usefull swapping shortcut",
     "author": "Samuel Bernou, based on Cédric Lepiller/Hjalti Hjalmarsson ideas",
-    "version": (1, 7, 1),
+    "version": (1, 7, 2),
     "blender": (3, 0, 0),
     "location": "Hit TAB swap outliner/property editor, Z swap dopesheet/graph editor, shift+Z in timeline, ctrl+shift+alt+X swap active object's properties tabs from anywhere",
     "warning": "",
@@ -49,15 +49,24 @@ def has_physics(ob):
     if ob.type == 'MESH' and ob.collision:
         # print ('collision')#Dbg#
         return (1)
+
+    if hasattr(ob, 'field') and ob.field:
+        return (1)
+
     if has_mod(ob):
-        # print ('has_modifier')#Dbg#
         for m in ob.modifiers:
             if m.type in ['CLOTH', 'SOFT_BODY', 'FLUID_SIMULATION', 'DYNAMIC_PAINT', 'SMOKE']:
                 return(1)
     return (0)
 
 def has_mod(ob):
-    return(len(ob.modifiers))
+    if ob.type == 'GPENCIL':
+        return(len(ob.grease_pencil_modifiers))
+    else:
+        return(len(ob.modifiers))
+
+def has_gp_fx(ob):
+    return(len(ob.shader_effects))
 
 def has_const(ob):
     return(len(ob.constraints))
@@ -80,14 +89,15 @@ def Swap_properties_panel():
         return (1, '"properties" region must be visible on screen')
 
     DicObjects = {
-    'MESH': ['DATA','MATERIAL','PARTICLES','PHYSICS', 'OBJECT','CONSTRAINT', 'MODIFIER',],
-    'CURVE' : ['DATA','MATERIAL','OBJECT','CONSTRAINT','MODIFIER',],
+    'MESH': ['DATA','MATERIAL','OBJECT','MODIFIER','PARTICLES','PHYSICS','CONSTRAINT',],
+    'CURVE' : ['DATA','MATERIAL','OBJECT','MODIFIER','PHYSICS','CONSTRAINT',],
     'EMPTY': ['DATA','PHYSICS', 'OBJECT','CONSTRAINT',],
     'ARMATURE': ['DATA', 'BONE','BONE_CONSTRAINT', 'PHYSICS', 'OBJECT','CONSTRAINT',],
     'CAMERA' : ['DATA','OBJECT','CONSTRAINT',],
-    'LATTICE' : ['DATA','OBJECT','CONSTRAINT','MODIFIER',],
+    'LATTICE' : ['DATA','OBJECT','MODIFIER','CONSTRAINT',],
     'LAMP' : ['DATA','PHYSICS','OBJECT','CONSTRAINT',],
     'FONT' : ['DATA','MATERIAL','PHYSICS','OBJECT','CONSTRAINT', 'MODIFIER',],
+    'GPENCIL' : ['DATA','MATERIAL','OBJECT','MODIFIER', 'SHADERFX','PHYSICS', 'CONSTRAINT',]
     }
 
     tp = obj.type
@@ -99,16 +109,18 @@ def Swap_properties_panel():
     for p in list(props):
         if p == 'PARTICLES' and not has_particles(obj):
             props.remove(p)
-        if p == 'MODIFIER' and not has_mod(obj):
+        elif p == 'MODIFIER' and not has_mod(obj):
             props.remove(p)
-        if p == 'MATERIAL' and not has_mat(obj):
+        elif p == 'SHADERFX' and not has_gp_fx(obj):
             props.remove(p)
-        if p == 'CONSTRAINT' and not has_const(obj):
+        elif p == 'MATERIAL' and not has_mat(obj):
             props.remove(p)
-        if p == 'PHYSICS' and not has_physics(obj):
+        elif p == 'CONSTRAINT' and not has_const(obj):
+            props.remove(p)
+        elif p == 'PHYSICS' and not has_physics(obj):
             props.remove(p)
 
-    print (props, 'availables panels')#Dbg#
+    # print (props, 'availables panels')#Dbg#
 
 
     if pan in props:
