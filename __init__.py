@@ -2,8 +2,8 @@ bl_info = {
     "name": "TapTapSwap",
     "description": "Add some usefull swapping shortcut",
     "author": "Samuel Bernou, based on Cédric Lepiller/Hjalti Hjalmarsson ideas",
-    "version": (1, 7, 0),
-    "blender": (2, 80, 0),
+    "version": (1, 7, 1),
+    "blender": (3, 0, 0),
     "location": "Hit TAB swap outliner/property editor, Z swap dopesheet/graph editor, shift+Z in timeline, ctrl+shift+alt+X swap active object's properties tabs from anywhere",
     "warning": "",
     "doc_url": "https://github.com/Pullusb/TapTapSwap",
@@ -46,7 +46,7 @@ def has_physics(ob):
     if ob.rigid_body or ob.rigid_body_constraint:
         # print ('rigid_body or ob.rigid_body_constraint')#Dbg#
         return (1)
-    if ob.type == 'MESH' and ob.collision.use:
+    if ob.type == 'MESH' and ob.collision:
         # print ('collision')#Dbg#
         return (1)
     if has_mod(ob):
