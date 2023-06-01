@@ -1,10 +1,13 @@
 bl_info = {
     "name": "TapTapSwap",
     "description": "Add some usefull swapping shortcut",
-    "author": "Samuel Bernou, based on Cédric Lepiller/Hjalti Hjalmarsson ideas",
-    "version": (1, 7, 2),
+    "author": "Samuel Bernou, Tonton, based on Cédric Lepiller/Hjalti Hjalmarsson ideas",
+    "version": (1, 7, 3),
     "blender": (3, 0, 0),
-    "location": "Hit TAB swap outliner/property editor, Z swap dopesheet/graph editor, shift+Z in timeline, ctrl+shift+alt+X swap active object's properties tabs from anywhere",
+    "location": "Hit TAB swap outliner/property editor, \
+        Z swap dopesheet/graph editor, shift+Z in timeline, \
+        ctrl+shift+alt+X swap active object's properties tabs from anywhere, \
+        Ctrl+TAB to swap outliner mode, add Shift to reverse",
     "warning": "",
     "doc_url": "https://github.com/Pullusb/TapTapSwap",
     "category": "User Interface" }
@@ -34,7 +37,6 @@ def get_panel():
                 if space.type == 'PROPERTIES':
                     return(space.context)
     return (0)
-
 
 def bone_has_physics(ob):
     if ob.rigid_body or ob.rigid_body_constraint:
@@ -131,7 +133,6 @@ def Swap_properties_panel():
     set_panel(nextpan)
     return(0,'')
 
-
 class UI_OT_Swap_panel_prop(bpy.types.Operator):
     bl_idname = "samtools.swap_panel_prop"
     bl_label = "Swap panel properties"
@@ -150,6 +151,69 @@ class UI_OT_Swap_panel_prop(bpy.types.Operator):
         return {"FINISHED"}
 
 
+def set_outliner_mode(mode):
+    '''take a panel name and apply it to properties zone'''
+    area=bpy.context.area
+    if area.type == 'OUTLINER':
+        area.spaces[0].display_mode=mode
+        return (1)
+    return (0)
+
+def get_outliner_mode():
+    '''return active panel name of the properties zone'''
+    area=bpy.context.area
+    if area.type == 'OUTLINER':
+        return(area.spaces[0].display_mode)
+    return (0)
+
+def Swap_outliner_mode(revert=False):
+    modes = [
+        "SCENES",
+        "VIEW_LAYER",
+        "SEQUENCE",
+        "LIBRARIES",
+        "DATA_API",
+        "LIBRARY_OVERRIDES",
+        "ORPHAN_DATA",
+        ]
+
+    mode = get_outliner_mode()
+    if not mode:
+        return (1, 'No active outliner')
+
+    idx=modes.index(mode)
+    if revert and idx==0:
+        nextmode=modes[len(modes)-1]
+    elif not revert and idx==len(modes)-1:
+        nextmode=modes[0]
+    else:
+        if revert:
+            nextmode=modes[idx-1]
+        else:
+            nextmode=modes[idx+1]
+
+    set_outliner_mode(nextmode)
+    return(0,'')
+
+class UI_OT_Swap_outliner_mode(bpy.types.Operator):
+    bl_idname = "samtools.swap_outliner_mode"
+    bl_label = "Swap outliner mode"
+    bl_description = "Swap outliner mode"
+    bl_options = {"REGISTER","INTERNAL"}
+
+    C = bpy.context
+    D = bpy.data
+
+    revert: bpy.props.BoolProperty(name="Revert")
+
+    @classmethod
+    def poll(cls, context):
+        return context.area.type=="OUTLINER"
+
+    def execute(self, context):
+        Swap_outliner_mode(revert=self.revert)
+        return {"FINISHED"}
+
 ###--KEYMAPS
 
 addon_keymaps = []
@@ -163,6 +227,14 @@ def register_keymaps():
     km = addon.keymaps.new(name = "Window",space_type='EMPTY', region_type='WINDOW')
     ##ctrl+shift+X taken by carver ! so add alt
     kmi = km.keymap_items.new("samtools.swap_panel_prop", type = "X", value = "PRESS", shift = True, ctrl = True, alt = True)
+
+    ######--outliner mode swap
+    km = addon.keymaps.new(name = "Window",space_type='EMPTY', region_type='WINDOW')
+    kmi = km.keymap_items.new("samtools.swap_outliner_mode", type = "TAB", value = "PRESS", ctrl = True)
+    kmi.properties.revert=False
+    km = addon.keymaps.new(name = "Window",space_type='EMPTY', region_type='WINDOW')
+    kmi = km.keymap_items.new("samtools.swap_outliner_mode", type = "TAB", value = "PRESS", ctrl = True, shift=True)
+    kmi.properties.revert=True
 
     #-#-#-#-- keymap only (zone)
     ######Outliner/Properties Swap
@@ -230,12 +302,14 @@ def unregister_keymaps():
 def register():
     if not bpy.app.background:
         bpy.utils.register_class(UI_OT_Swap_panel_prop)
+        bpy.utils.register_class(UI_OT_Swap_outliner_mode)
         register_keymaps()
 
 def unregister():
     if not bpy.app.background:
         unregister_keymaps()
         bpy.utils.unregister_class(UI_OT_Swap_panel_prop)
+        bpy.utils.unregister_class(UI_OT_Swap_outliner_mode)
 
 if __name__ == "__main__":
     register()

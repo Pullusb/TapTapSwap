@@ -23,6 +23,8 @@ Keymap **Z** to swap between **dopesheet and graph editor**. (Hjalti Hjalmarsson
 
 Keymap **shift+Z** to swap between **timeline and dopesheet** (my idea, hurray !)
 
+Keymap **Ctrl+Tab** to swap between **outliner modes**, add Shift to reverse
+
 *bonus :*  
 Keymap **ctrl+shift+alt+X** to iterate in properties panels tabs (the shortcut is way to complex but it's hard to get free left-hand-accessible shortcuts these days ^^)
   
