@@ -2,7 +2,7 @@ bl_info = {
     "name": "TapTapSwap",
     "description": "Add some useful swapping shortcut",
     "author": "Samuel Bernou, Tonton, based on Cédric Lepiller/Hjalti Hjalmarsson ideas",
-    "version": (1, 7, 5),
+    "version": (1, 7, 6),
     "blender": (3, 0, 0),
     "location": "Hit TAB swap outliner/property editor, \
         Ctrl+TAB swap outliner mode, add Shift to reverse, \
@@ -132,6 +132,17 @@ class UI_OT_swap_panel_prop(bpy.types.Operator):
     def execute(self, context):
         swap_properties_panel()
         return {"FINISHED"}
+    
+class UI_OT_swap_timeline_dopesheet_mode(bpy.types.Operator):
+    bl_idname = "taptap.swap_timeline_dopesheet_mode"
+    bl_label = "Swap Timeline and Dopesheet"
+    bl_description = "Swap Timeline and Dopesheet editor"
+    bl_options = {"REGISTER", "INTERNAL"}
+
+    def execute(self, context):
+        space = context.area.spaces.active # context.area.spaces[0]
+        space.mode = 'DOPESHEET' if space.mode == 'TIMELINE' else 'TIMELINE'
+        return {"FINISHED"}
 
 def set_outliner_mode(mode):
     '''take a panel name and apply it to properties zone'''
@@ -176,10 +187,6 @@ class UI_OT_swap_outliner_mode(bpy.types.Operator):
 
     revert : bpy.props.BoolProperty(name="Revert")
 
-    @classmethod
-    def poll(cls, context):
-        return context.area.type == "OUTLINER"
-
     def execute(self, context):
         swap_outliner_mode(revert=self.revert)
         return {"FINISHED"}
@@ -190,7 +197,7 @@ addon_keymaps = []
 def register_keymaps():
     addon = bpy.context.window_manager.keyconfigs.addon
 
-    ######--Object Property swap
+    ###### Object Property swap
 
     ## All editor:
     km = addon.keymaps.new(name = "Window", space_type='EMPTY', region_type='WINDOW')
@@ -198,7 +205,7 @@ def register_keymaps():
     kmi = km.keymap_items.new("taptap.swap_panel_prop", type = "X", value = "PRESS", shift = True, ctrl = True, alt = True)
     addon_keymaps.append((km, kmi))
 
-    ###### Outliner/Properties Swap
+    ###### Outliner / Properties Swap
 
     ## From Properties to Outliner - Tab
     km = addon.keymaps.new(name = "Property Editor",space_type='PROPERTIES', region_type='WINDOW')
@@ -223,16 +230,21 @@ def register_keymaps():
     kmi.properties.revert=True
     addon_keymaps.append((km, kmi))
 
-    ###### dopesheet/GraphEditor Swap - Z
+    ###### Dopesheet / Timeline / GraphEditor Swap - Z
 
-    ## From dopesheet to Graph
     km = addon.keymaps.new(name = "Dopesheet", space_type='DOPESHEET_EDITOR', region_type='WINDOW')
+
+    ## Dopesheet -> Graph - Z
     kmi = km.keymap_items.new("wm.context_set_enum", type = "Z", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'GRAPH_EDITOR'
     addon_keymaps.append((km, kmi))
 
-    ## From Graph to dopesheet - Z
+    ## Dopesheet <-> Timeline Swap - shift Z
+    kmi = km.keymap_items.new("taptap.swap_timeline_dopesheet_mode", type = "Z", value = "PRESS", shift = True)
+    addon_keymaps.append((km, kmi))
+
+    ## Graph -> dopesheet - Z
     km = addon.keymaps.new(name = "Graph Editor",space_type='GRAPH_EDITOR', region_type='WINDOW')
     kmi = km.keymap_items.new("wm.context_set_enum", type = "Z", value = "PRESS")
     kmi.properties.data_path = 'area.type'
@@ -246,14 +258,21 @@ def unregister_keymaps():
             km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
+classes = (
+    UI_OT_swap_panel_prop,
+    UI_OT_swap_timeline_dopesheet_mode,
+    UI_OT_swap_outliner_mode,
+)
+
 ###--REGISTER
 
 def register():
     if bpy.app.background:
         return
 
-    bpy.utils.register_class(UI_OT_swap_panel_prop)
-    bpy.utils.register_class(UI_OT_swap_outliner_mode)
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
     register_keymaps()
 
 def unregister():
@@ -261,8 +280,9 @@ def unregister():
         return
 
     unregister_keymaps()
-    bpy.utils.unregister_class(UI_OT_swap_panel_prop)
-    bpy.utils.unregister_class(UI_OT_swap_outliner_mode)
+
+    for cls in reversed(classes):
+        bpy.utils.unregister_class(cls)
 
 if __name__ == "__main__":
     register()
