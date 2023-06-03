@@ -2,7 +2,7 @@ bl_info = {
     "name": "TapTapSwap",
     "description": "Add some useful swapping shortcut",
     "author": "Samuel Bernou, Tonton, based on Cédric Lepiller/Hjalti Hjalmarsson ideas",
-    "version": (1, 7, 4),
+    "version": (1, 7, 5),
     "blender": (3, 0, 0),
     "location": "Hit TAB swap outliner/property editor, \
         Ctrl+TAB swap outliner mode, add Shift to reverse, \
@@ -190,64 +190,60 @@ addon_keymaps = []
 def register_keymaps():
     addon = bpy.context.window_manager.keyconfigs.addon
 
-    ######--object property swap
+    ######--Object Property swap
 
-    ## all view:
-    km = addon.keymaps.new(name = "Window",space_type='EMPTY', region_type='WINDOW')
+    ## All editor:
+    km = addon.keymaps.new(name = "Window", space_type='EMPTY', region_type='WINDOW')
     ## ctrl+shift+X taken by carver ! so add alt
     kmi = km.keymap_items.new("taptap.swap_panel_prop", type = "X", value = "PRESS", shift = True, ctrl = True, alt = True)
     addon_keymaps.append((km, kmi))
 
-    ######--outliner mode swap
-    km = addon.keymaps.new(name = "Window",space_type='EMPTY', region_type='WINDOW')
-    kmi = km.keymap_items.new("taptap.swap_outliner_mode", type = "TAB", value = "PRESS", ctrl = True)
-    kmi.properties.revert=False
-    addon_keymaps.append((km, kmi))
+    ###### Outliner/Properties Swap
 
-    km = addon.keymaps.new(name = "Window",space_type='EMPTY', region_type='WINDOW')
-    kmi = km.keymap_items.new("taptap.swap_outliner_mode", type = "TAB", value = "PRESS", ctrl = True, shift=True)
-    kmi.properties.revert=True
-    addon_keymaps.append((km, kmi))
-
-    #-#-#-#-- keymap only (zone)
-
-    ######Outliner/Properties Swap
-
-    ##from Properties to Outliner - Tab
+    ## From Properties to Outliner - Tab
     km = addon.keymaps.new(name = "Property Editor",space_type='PROPERTIES', region_type='WINDOW')
     kmi = km.keymap_items.new("wm.context_set_enum", type = "TAB", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'OUTLINER'
     addon_keymaps.append((km, kmi))
 
-    ##from Outliner to Properties - Tab
+    ## From Outliner to Properties - Tab
     km = addon.keymaps.new(name = "Outliner",space_type='OUTLINER', region_type='WINDOW')
     kmi = km.keymap_items.new("wm.context_set_enum", type = "TAB", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'PROPERTIES'
     addon_keymaps.append((km, kmi))
 
+    ## Outliner mode swap
+    kmi = km.keymap_items.new("taptap.swap_outliner_mode", type = "TAB", value = "PRESS", ctrl = True)
+    kmi.properties.revert=False
+    addon_keymaps.append((km, kmi))
 
-    ######dopesheet/GraphEditor Swap - Z
+    kmi = km.keymap_items.new("taptap.swap_outliner_mode", type = "TAB", value = "PRESS", ctrl = True, shift=True)
+    kmi.properties.revert=True
+    addon_keymaps.append((km, kmi))
 
-    ##from dopesheet to Graph
+    ###### dopesheet/GraphEditor Swap - Z
+
+    ## From dopesheet to Graph
     km = addon.keymaps.new(name = "Dopesheet", space_type='DOPESHEET_EDITOR', region_type='WINDOW')
     kmi = km.keymap_items.new("wm.context_set_enum", type = "Z", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'GRAPH_EDITOR'
     addon_keymaps.append((km, kmi))
 
-    ##from Graph to dopesheet - Z
+    ## From Graph to dopesheet - Z
     km = addon.keymaps.new(name = "Graph Editor",space_type='GRAPH_EDITOR', region_type='WINDOW')
     kmi = km.keymap_items.new("wm.context_set_enum", type = "Z", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'DOPESHEET_EDITOR'
     addon_keymaps.append((km, kmi))
 
-
 def unregister_keymaps():
     for km, kmi in addon_keymaps:
-        km.keymap_items.remove(kmi)
+        if kmi in km.keymap_items[:]:
+            # check first to skip, kmi registered in 'Window' (avoir error: Cannot be removed from window)
+            km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
 ###--REGISTER
