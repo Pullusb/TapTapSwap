@@ -1,9 +1,9 @@
 bl_info = {
     "name": "TapTapSwap",
     "description": "Add some useful swapping shortcut",
-    "author": "Samuel Bernou, Tonton, based on Cédric Lepiller/Hjalti Hjalmarsson ideas",
-    "version": (1, 7, 6),
-    "blender": (3, 0, 0),
+    "author": "Samuel Bernou, Tonton, based on Cédric Lepiller/Hjalti Hjalmarsson ideas, Joseph Hansen",
+    "version": (1, 7, 7),
+    "blender": (3, 6, 5),
     "location": "Hit TAB swap outliner/property editor, \
         Ctrl+TAB swap outliner mode, add Shift to reverse, \
         Z swap dopesheet/graph editor, shift+Z in timeline, \
@@ -194,6 +194,7 @@ class UI_OT_swap_outliner_mode(bpy.types.Operator):
 ###--KEYMAPS
 
 addon_keymaps = []
+
 def register_keymaps():
     addon = bpy.context.window_manager.keyconfigs.addon
 
@@ -219,6 +220,16 @@ def register_keymaps():
     kmi = km.keymap_items.new("wm.context_set_enum", type = "TAB", value = "PRESS")
     kmi.properties.data_path = 'area.type'
     kmi.properties.value = 'PROPERTIES'
+    addon_keymaps.append((km, kmi))
+    
+    ## From Shader Nodes to Geometry Nodes - Shift + Tilde
+    km = addon.keymaps.new(name = "Node Editor", space_type='NODE_EDITOR', region_type='WINDOW')
+    kmi = km.keymap_items.new("node.switch_to_geometry", type = "ACCENT_GRAVE", value = "PRESS", shift=True)
+    addon_keymaps.append((km, kmi))
+
+    ## From Geometry Nodes to Shader Nodes - Shift + Tilde
+    km = addon.keymaps.new(name = "Node Editor", space_type='NODE_EDITOR', region_type='WINDOW')
+    kmi = km.keymap_items.new("node.switch_to_shader", type = "ACCENT_GRAVE", value = "PRESS", shift=True)
     addon_keymaps.append((km, kmi))
 
     ## Outliner mode swap
@@ -258,10 +269,38 @@ def unregister_keymaps():
             km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
+
+class NODE_OT_switch_to_geometry(bpy.types.Operator):
+    bl_idname = "node.switch_to_geometry"
+    bl_label = "Switch to Geometry Nodes"
+
+    @classmethod
+    def poll(cls, context):
+        return context.space_data.tree_type == 'ShaderNodeTree'
+
+    def execute(self, context):
+        context.space_data.tree_type = 'GeometryNodeTree'
+        return {'FINISHED'}
+
+class NODE_OT_switch_to_shader(bpy.types.Operator):
+    bl_idname = "node.switch_to_shader"
+    bl_label = "Switch to Shader Nodes"
+
+    @classmethod
+    def poll(cls, context):
+        return context.space_data.tree_type == 'GeometryNodeTree'
+
+    def execute(self, context):
+        context.space_data.tree_type = 'ShaderNodeTree'
+        return {'FINISHED'}
+
 classes = (
     UI_OT_swap_panel_prop,
     UI_OT_swap_timeline_dopesheet_mode,
     UI_OT_swap_outliner_mode,
+    NODE_OT_switch_to_geometry,
+    NODE_OT_switch_to_shader
+    
 )
 
 ###--REGISTER
@@ -286,3 +325,4 @@ def unregister():
 
 if __name__ == "__main__":
     register()
+
