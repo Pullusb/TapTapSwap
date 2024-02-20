@@ -34,6 +34,10 @@ Keymap **ctrl+shift+alt+X** to iterate in properties panels tabs (the shortcut i
 ---
 ### Changelog
 
+#### 1.8.0 (2/18/24)
+
+- Add Shift + Tilde to toggle between Shader and Graph editor (user can customize keymap) 
+
 #### 1.7.0 (2022/06/22)
 
 - changed from single file mode to folder addon mode.
